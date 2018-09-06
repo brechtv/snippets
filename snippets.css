@@ -13,6 +13,13 @@ a:hover {
 	color: #FF5722
 }
 
+blockquote {
+	 padding: 0 1em;
+    color: #6a737d;
+    border-left: 0.1em solid #dfe2e5;
+    font-family: 'Vollkorn', serif;
+}
+
 .page-title {
 	font-size: xx-large;
 	font-family: 'PT Sans', sans-serif;
@@ -29,6 +36,11 @@ a:hover {
 	font-size: large;
 	font-family: 'PT Sans', sans-serif;
 	font-weight: bold;
+}
+
+.snippet-counter {
+	font-size: x-small;
+	font-family: 'PT Sans', sans-serif;
 }
 
 .snippet-tags {
@@ -58,6 +70,7 @@ a:hover {
 .snippet-footer {
 	font-size: x-small;
 	font-family: 'PT Sans', sans-serif;
+	margin-top: 10px;
 }
 
 .snippets-container {

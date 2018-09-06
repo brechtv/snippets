@@ -7,6 +7,7 @@ function createWebsite(id) {
         var results = data.feed.entry;
         results.reverse() // last snippet to the top
         var webpage_title = data.feed.title.$t;
+        $(".snippet-counter").html(results.length + " snippets found")
 
         $.each(results, function(key, result) {
             var snippet = {
@@ -32,8 +33,8 @@ function createWebsite(id) {
             var template = `<li id="` + snippet.title_id + `" class="snippet-li ` + tags_class + `">
                             <a class="snippet-title" href="#` + snippet.title_id + `">` + snippet.title + `</a>
                              `+ tags_html + `
-                            <p class="snippet-content">` + snippet.content + `</p>
-                            <p class="snippet-footer">` + snippet.meta + `</p>
+                            <div class="snippet-content">` + snippet.content + `</div>
+                            <div class="snippet-footer">` + snippet.meta + `</div>
                         </li>`
             $(".timeline").append(template).hide().slideDown(200);
         });
@@ -50,9 +51,12 @@ function createWebsite(id) {
 function filterOnTag(tag) {
     if(tag == "all") {
         $(".snippet-li").show()
+        $(".snippet-counter").html($(".snippet-li").length + " snippets found")
     } else {
     $(".snippet-li").hide()
     $("." + tag).show()
+    counter_suffix = ($("." + tag).length == 1 ? " snippet found" : " snippets found")
+    $(".snippet-counter").html($("." + tag).length + counter_suffix)
     } 
 }
 
