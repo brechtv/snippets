@@ -10,7 +10,7 @@ function createWebsite(id) {
 
         $.each(results, function(key, result) {
             var snippet = {
-                "meta": result.gsx$meta.$t,
+                "meta": micromarkdown.parse(result.gsx$meta.$t),
                 "title": result.gsx$title.$t,
                 "title_id": result.gsx$title.$t.toLowerCase()
                     .replace(/[^a-zA-Z0-9 ]/g, '')
