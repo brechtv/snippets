@@ -1,13 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Vollkorn');
 @import url('https://fonts.googleapis.com/css?family=PT+Sans|Vollkorn');
 
-
 html, body {
 	background-color: #fff;
 }
 
 a {
-	color: #E91E63  
+	color: #E91E63
 }
 
 a:hover {
@@ -21,13 +20,17 @@ a:hover {
 }
 
 .snippet-li {
+	border-bottom-color: rgb(222, 222, 222);
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
 }
- 
+
 .snippet-title {
 	font-size: large;
 	font-family: 'PT Sans', sans-serif;
 	font-weight: bold;
 }
+
 .snippet-tags {
 	font-size: x-small;
 	background-color: #c5c5c5;
@@ -35,9 +38,22 @@ a:hover {
 	padding: 2px 5px 2px 5px;
 	border-radius: 2px;
 }
+
+.snippet-tag-link {
+	font-size: x-small;
+	background-color: #c5c5c5;
+	color: #fff;
+	padding: 2px 5px 2px 5px;
+	border-radius: 2px;
+	margin-right: 5px;
+	border-style: none;
+	cursor: pointer
+}
+
 .snippet-content {
 	font-family: 'Vollkorn', serif;
 }
+
 .snippet-footer {
 	font-size: x-small;
 	font-family: 'PT Sans', sans-serif;
@@ -54,32 +70,35 @@ a:hover {
 }
 
 ul.timeline {
-    list-style-type: none;
-    position: relative;
+	list-style-type: none;
+	position: relative;
 }
+
 ul.timeline:before {
-    content: ' ';
-    background: #d4d9df;
-    display: inline-block;
-    position: absolute;
-    left: 29px;
-    width: 2px;
-    height: 100%;
-    z-index: 400;
+	content: ' ';
+	background: #d4d9df;
+	display: inline-block;
+	position: absolute;
+	left: 29px;
+	width: 2px;
+	height: 100%;
+	z-index: 400;
 }
+
 ul.timeline > li {
-    margin: 20px 0;
-    padding-left: 20px;
+	margin: 20px 0;
+	padding-left: 20px;
 }
+
 ul.timeline > li:before {
-    content: ' ';
-    background: white;
-    display: inline-block;
-    position: absolute;
-    border-radius: 50%;
-    border: 3px solid #d4d9df;
-    left: 20px;
-    width: 20px;
-    height: 20px;
-    z-index: 400;
+	content: ' ';
+	background: white;
+	display: inline-block;
+	position: absolute;
+	border-radius: 50%;
+	border: 3px solid #d4d9df;
+	left: 20px;
+	width: 20px;
+	height: 20px;
+	z-index: 400;
 }
