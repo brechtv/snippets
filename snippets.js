@@ -18,17 +18,29 @@ function createWebsite(id) {
                 "content": micromarkdown.parse(result.gsx$content.$t),
                 "tags": result.gsx$tags.$t
             }
-            tags.push(snippet.tags)
-            var template = `<li id="` + snippet.title_id + `" class="snippet-li ` + snippet.tags + `">
+
+            snippet_tags = snippet.tags.split(",").map(function (str) {return str.trim();});
+            tags = tags.concat(snippet_tags)
+
+            tags_html = ""
+            tags_class = ""
+            $.each(snippet_tags, function(i,v) {
+                tags_html += `<span class="snippet-tags float-right">` + v + `</span>`
+                tags_class += v + ` `
+            })
+            
+            var template = `<li id="` + snippet.title_id + `" class="snippet-li ` + tags_class + `">
                             <a class="snippet-title" href="#` + snippet.title_id + `">` + snippet.title + `</a>
-                            <span class="snippet-tags float-right">` + snippet.tags + `</span>
+                             `+ tags_html + `
                             <p class="snippet-content">` + snippet.content + `</p>
                             <p class="snippet-footer">` + snippet.meta + `</p>
                         </li>`
             $(".timeline").append(template).hide().slideDown(200);
         });
+        
         tags = tags.filter(uniqueTags)
-
+        tags.sort()
+        console.log(tags)
         $.each(tags, function(i, v) {
             $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + v + `")'>` + v + `</button>`)
         })
@@ -41,7 +53,7 @@ function filterOnTag(tag) {
     } else {
     $(".snippet-li").hide()
     $("." + tag).show()
-    }
+    } 
 }
 
 function uniqueTags(value, index, self) {
