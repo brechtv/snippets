@@ -34,14 +34,17 @@ function createWebsite(id) {
                             <a class="snippet-title" href="#` + snippet.title_id + `">` + snippet.title + `</a>
                              `+ tags_html + `
                             <div class="snippet-content">` + snippet.content + `</div>
-                            <div class="snippet-footer">` + snippet.meta + `</div>
+                            <div class="snippet-footer">` + snippet.meta + `
+                            <button class="float-right copy-btn"  data-clipboard-action="copy" data-clipboard-target="#` + snippet.title_id +
+                            ` .snippet-content">copy</button></div>
                         </li>`
             $(".timeline").append(template).hide().slideDown(200);
         });
+
+        new ClipboardJS('.copy-btn');
         
         tags = tags.filter(uniqueTags)
         tags.sort()
-        console.log(tags)
         $.each(tags, function(i, v) {
             $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + v + `")'>` + v + `</button>`)
         })

@@ -73,6 +73,14 @@ blockquote {
 	margin-top: 10px;
 }
 
+.copy-btn {
+	font-size: x-small;
+	color: #E91E63;
+	border-style: none;
+	cursor: pointer
+}
+
+
 .snippets-container {
 	background-color: #fff;
 	padding: 10px;
