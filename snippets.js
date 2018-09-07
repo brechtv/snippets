@@ -10,7 +10,6 @@ function init(id) {
     var URL = "https://spreadsheets.google.com/feeds/list/" + id + "/od6/public/values?alt=json"
     $.getJSON(URL, function(data) {
         $("#loading-snippet").remove()
-
         var results = data.feed.entry;
         results.reverse() // last snippet to the top
         var webpage_title = data.feed.title.$t;
@@ -26,19 +25,16 @@ function init(id) {
                 "content": micromarkdown.parse(result.gsx$content.$t),
                 "tags": result.gsx$tags.$t
             }
-
             snippet_tags = snippet.tags.split(",").map(function(str) {
                 return str.trim();
             });
             tags = tags.concat(snippet_tags)
-
             tags_html = ""
             tags_class = ""
             $.each(snippet_tags, function(i, v) {
                 tags_html += `<span class="snippet-tags float-right">` + v + `</span>`
                 tags_class += v + ` `
             })
-
             var template = `<li id="` + snippet.title_id + `" class="snippet-li ` + tags_class + `">
                             <a class="snippet-title" href="#` + snippet.title_id + `">` + snippet.title + `</a>
                              ` + tags_html + `
@@ -51,10 +47,8 @@ function init(id) {
         });
 
         new ClipboardJS('.copy-btn');
-
         tags = tags.filter(uniqueTags)
         tags.sort()
-
         $.each(tags, function(i, v) {
             if (i < 10) {
                 $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + v + `")'>` + v + `</button>`)
@@ -89,7 +83,6 @@ function newSnippet() {
             console.log("Data: " + data + "\nStatus: " + status);
         });
     }
-
 }
 
 function showAllTags() {
