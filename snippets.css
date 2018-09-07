@@ -40,6 +40,22 @@ label {
 	font-size: small;
 }
 
+.search-tags-input {
+	font-size: x-small;
+	color: #353535;
+	border-style: none;
+	border-bottom-style: solid;
+	border-bottom-color: #b5b5b5;
+	border-bottom-width: 1px;
+	width: 100%;
+	text-align: center
+}
+
+.search-tags-input:focus {
+		outline: none;
+	outline: none -webkit-focus-ring-color;
+}
+
 .snippet-form {
 	background-color: #f5f5f5;
 	margin-top: 15px;

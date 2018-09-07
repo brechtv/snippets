@@ -97,6 +97,62 @@ function newSnippet() {
     }
 }
 
+
+// to extract the url parameter
+function getUrlParam(name, url) {
+    if (!url) url = location.href;
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regexS = "[\\?&]" + name + "=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(url);
+    return results == null ? null : results[1];
+}
+
+// create a snippet data structure
+function createSnippet(title, id, content, meta, tags) {
+    // cleaner
+    var snippet = {
+        "title": title,
+        "id": id,
+        "content": content,
+        "meta": meta,
+        "tags": tags
+    }
+    return snippet
+}
+
+// create a snippet HTML template
+function createSnippetHTML(title, id, content, meta, tags) {
+    // in case there's only one or no tags
+    // parse and process tags
+    try {
+        var snippet_tags = tags.split(",").map(function(str) {
+            return str.trim()
+        })
+    } catch (err) {
+        var snippet_tags = tags
+    }
+    var tags_html = "",
+        tags_class = ""
+    $.each(snippet_tags, function(i, v) {
+        tags_html += `<span class="snippet-tags float-right">` + v + `</span>`;
+        tags_class += v + ` `;
+    })
+
+    // then create the HTML template
+    var template = `<li id="` + id + `" class="snippet-li ` + tags_class + `">
+        <span class="snippet-title">` + title + `</span>
+         ` + tags_html + `
+        <div class="snippet-content">` + content + `</div>
+        <div class="snippet-footer">` + meta + `
+        <button class="float-right copy-btn"  data-clipboard-action="copy" data-clipboard-target="#` + id +
+        ` .snippet-content">copy</button></div></li>`
+    return template
+}
+
+// everything tag related
+
+
 // when a user clicks a tag
 function filterOnTag(tag) {
     if (tag == "all") {
@@ -172,54 +228,17 @@ function renderAllTags() {
     })
 }
 
-// to extract the url parameter
-function getUrlParam(name, url) {
-    if (!url) url = location.href;
-    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-    var regexS = "[\\?&]" + name + "=([^&#]*)";
-    var regex = new RegExp(regexS);
-    var results = regex.exec(url);
-    return results == null ? null : results[1];
-}
+// listen to the search box
+// returns suggested tags
+function updateResult(query) {
+    let resultList = document.querySelector(".page-tags");
+    resultList.innerHTML = "";
 
-// create a snippet data structure
-function createSnippet(title, id, content, meta, tags) {
-    // cleaner
-    var snippet = {
-        "title": title,
-        "id": id,
-        "content": content,
-        "meta": meta,
-        "tags": tags
-    }
-    return snippet
-}
-
-// create a snippet HTML template
-function createSnippetHTML(title, id, content, meta, tags) {
-    // in case there's only one or no tags
-    // parse and process tags
-    try {
-        var snippet_tags = tags.split(",").map(function(str) {
-            return str.trim()
+    all_tags.map(function(algo){
+        query.split(" ").map(function (word){
+            if(algo.toLowerCase().indexOf(word.toLowerCase()) != -1){
+                resultList.innerHTML += `<button class='all-tag-link' onclick='filterOnTag("")'>${algo}</button>`;
+            }
         })
-    } catch (err) {
-        var snippet_tags = tags
-    }
-    var tags_html = "",
-        tags_class = ""
-    $.each(snippet_tags, function(i, v) {
-        tags_html += `<span class="snippet-tags float-right">` + v + `</span>`;
-        tags_class += v + ` `;
     })
-
-    // then create the HTML template
-    var template = `<li id="` + id + `" class="snippet-li ` + tags_class + `">
-        <span class="snippet-title">` + title + `</span>
-         ` + tags_html + `
-        <div class="snippet-content">` + content + `</div>
-        <div class="snippet-footer">` + meta + `
-        <button class="float-right copy-btn"  data-clipboard-action="copy" data-clipboard-target="#` + id +
-        ` .snippet-content">copy</button></div></li>`
-    return template
 }
