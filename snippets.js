@@ -1,14 +1,16 @@
 var tags = []
-init("1aF7Tn6uHd3iUC9ST2O23LiPFK3MpK3Xv3tKR2f1E7vI")
 
+init(getSheetId())
 
 function init(id) {
     var can_post = getUrlParam("post")
-    if(can_post == "true") {$("#new-snippet-container").show()}
+    if (can_post == "true") {
+        $("#new-snippet-container").show()
+    }
     var URL = "https://spreadsheets.google.com/feeds/list/" + id + "/od6/public/values?alt=json"
     $.getJSON(URL, function(data) {
         $("#loading-snippet").remove()
-        
+
         var results = data.feed.entry;
         results.reverse() // last snippet to the top
         var webpage_title = data.feed.title.$t;
@@ -61,25 +63,33 @@ function init(id) {
                 $(".page-tags").append(`<button class='snippet-tag-link' onclick='showAllTags()'>more ...</button>`)
             }
         })
-
-
     })
+}
 
+// aux functions
 
+function getSheetId() {
+    var scripts = document.getElementsByTagName('script');
+    var lastScript = scripts[scripts.length - 1];
+    var scriptName = lastScript;
+    var sheet = scriptName.getAttribute('data-id');
+    return sheet
 }
 
 function newSnippet() {
-        snippet = {
-            "title": $("#new-snippet-title").val(),
-            "content": $("#new-snippet-content").val(),
-            "meta": $("#new-snippet-meta").val(),
-            "tags": $("#new-snippet-tags").val()
-        }
-        //https://hooks.zapier.com/hooks/catch/2756301/q80edt/
-        console.log(snippet)
-        $.post("https://hooks.zapier.com/hooks/catch/2756301/q80edt/", snippet, function(data, status){
-        console.log("Data: " + data + "\nStatus: " + status);
-    });
+    snippet = {
+        "title": $("#new-snippet-title").val(),
+        "content": $("#new-snippet-content").val(),
+        "meta": $("#new-snippet-meta").val(),
+        "tags": $("#new-snippet-tags").val(),
+        "token": $("#new-snippet-token").val()
+    }
+    if (snippet.token == "AQW") {
+        $.post("https://hooks.zapier.com/hooks/catch/2756301/q80edt/", snippet, function(data, status) {
+            console.log("Data: " + data + "\nStatus: " + status);
+        });
+    }
+
 }
 
 function showAllTags() {
@@ -106,11 +116,11 @@ function uniqueTags(value, index, self) {
     return self.indexOf(value) === index;
 }
 
-function getUrlParam( name, url ) {
+function getUrlParam(name, url) {
     if (!url) url = location.href;
-    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    var regexS = "[\\?&]"+name+"=([^&#]*)";
-    var regex = new RegExp( regexS );
-    var results = regex.exec( url );
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regexS = "[\\?&]" + name + "=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(url);
     return results == null ? null : results[1];
 }

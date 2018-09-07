@@ -40,7 +40,6 @@ label {
 	font-size: small;
 }
 
-
 .snippet-form {
 	background-color: #f5f5f5;
 	margin-top: 15px;
@@ -49,23 +48,12 @@ label {
 }
 
 .new-snippet-form-title {
-		font-size: large;
+	font-size: large;
 	font-family: 'PT Sans', sans-serif;
 	font-weight: bold;
 }
 
 .close-button {
-		font-size: x-small;
-	background-color: #c5c5c5;
-	color: #fff;
-	padding: 10px;
-	border-radius: 2px;
-	margin-right: 5px;
-	border-style: none;
-	cursor: pointer; 
-}
-
-#new-snippet-submit  {
 	font-size: x-small;
 	background-color: #c5c5c5;
 	color: #fff;
@@ -73,10 +61,20 @@ label {
 	border-radius: 2px;
 	margin-right: 5px;
 	border-style: none;
-	cursor: pointer; 
-	width: 100%;
+	cursor: pointer;
 }
 
+#new-snippet-submit {
+	font-size: x-small;
+	background-color: #c5c5c5;
+	color: #fff;
+	padding: 10px;
+	border-radius: 2px;
+	margin-right: 5px;
+	border-style: none;
+	cursor: pointer;
+	width: 100%;
+}
 
 .page-title {
 	font-size: xx-large;
@@ -88,7 +86,7 @@ label {
 	border-bottom-color: rgb(222, 222, 222);
 	border-bottom-style: solid;
 	border-bottom-width: 1px;
-	margin-bottom: 15px;
+	margin-bottom: 25px;
 }
 
 .snippet-title {
@@ -149,6 +147,13 @@ label {
 	font-size: x-small;
 }
 
+.post-snippet-link {
+	font-family: 'Vollkorn', serif;
+	font-size: x-small;
+	color: #E91E63;
+		cursor: pointer;
+}
+
 ul.timeline {
 	list-style-type: none;
 	position: relative;
@@ -163,13 +168,6 @@ ul.timeline:before {
 	width: 2px;
 	height: 100%;
 	z-index: 400;
-}
-
-ul.timeline > li {
-
-	/*margin: 20px 0;*/
-
-	/*padding-left: 20px;*/
 }
 
 ul.timeline > li:before {
