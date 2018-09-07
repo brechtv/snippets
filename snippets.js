@@ -92,6 +92,7 @@ function newSnippet() {
     if (snippet.token == "AQW") {
         $.post("https://hooks.zapier.com/hooks/catch/2756301/q80edt/", snippet, function(data, status) {
             console.log("Data: " + data + "\nStatus: " + status);
+            $("#new-snippet-container").hide()
         });
     }
 }
@@ -162,6 +163,8 @@ function filterOnTag(tag) {
             // clear the timeline first
             $(".timeline").empty()
             var results = data.feed.entry;
+            // last snippet to the top
+            results.reverse() 
             // result counter
             var results_length = 0;
 
@@ -236,7 +239,7 @@ function updateResult(query) {
     all_tags.map(function(algo) {
         query.split(" ").map(function(word) {
             if (algo.toLowerCase().indexOf(word.toLowerCase()) != -1) {
-                resultList.innerHTML += `<button class='all-tag-link' onclick='filterOnTag("")'>${algo}</button>`;
+                resultList.innerHTML += `<button class='all-tag-link' onclick='filterOnTag("${algo}")'>${algo}</button>`;
             }
         })
     })
