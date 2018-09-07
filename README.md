@@ -1,4 +1,4 @@
-### Snippets
+## Snippets
 
 A light-weight snippets tool built on a Google Spreadsheet. Easily customizable by pointing it to a different spreadsheet, just change the `[SPREADSHEET-ID]` in the `<script>` tag:
 
