@@ -13,7 +13,6 @@ function init() {
     if (can_post == "true") {
         $("#new-snippet-container").show()
     }
-
     // call the spreadsheet
     $.getJSON(URL, function(data) {
         // clear first, in case it's a re-init
@@ -43,6 +42,9 @@ function init() {
             });
             all_tags = all_tags.concat(tags)
 
+
+            console.log(snippetData.tags)
+
             // create the HTML for the snippet
             var snippetHTML = createSnippetHTML(
                 snippetData.title,
@@ -51,8 +53,16 @@ function init() {
                 snippetData.meta,
                 snippetData.tags)
 
-            // append the snippet to the timeline
-            $(".timeline").append(snippetHTML)
+            // 
+            var tag_filter = getUrlParam("tag")
+            if (tag_filter && tag_filter != "all") {
+                if (snippetData.tags.indexOf(tag_filter) > -1) {
+                    $(".timeline").append(snippetHTML)
+                }
+            } else {
+                $(".timeline").append(snippetHTML)
+            }
+
         });
 
         // initialize all copy buttons
@@ -93,6 +103,9 @@ function newSnippet() {
         $.post("https://hooks.zapier.com/hooks/catch/2756301/q80edt/", snippet, function(data, status) {
             console.log("Data: " + data + "\nStatus: " + status);
             $("#new-snippet-container").hide()
+            setTimeout(function() {
+                location.reload()
+            }, 500)
         });
     }
 }
@@ -157,15 +170,27 @@ function createSnippetHTML(title, id, content, meta, tags) {
 function filterOnTag(tag) {
     if (tag == "all") {
         init()
+        if (history.pushState) {
+            var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.pushState({
+                path: newurl
+            }, '', newurl);
+        }
     } else {
+        if (history.pushState) {
+            var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?tag=' + tag;
+            window.history.pushState({
+                path: newurl
+            }, '', newurl);
+        }
         $(".timeline").html(createSnippetHTML("Loading...", "loading", "Fetching snippets...", "...", "..."))
         $.getJSON(URL, function(data) {
             // clear the timeline first
             $(".timeline").empty()
             var results = data.feed.entry;
             // last snippet to the top
-            results.reverse() 
-            // result counter
+            results.reverse()
+                // result counter
             var results_length = 0;
 
             // render snippets again
