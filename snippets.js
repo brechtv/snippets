@@ -11,7 +11,7 @@ function init() {
     // clear first, in case it's a re-init
     $(".timeline").empty()
     $(".snippet-tag-link").remove()
-    // if the url param is present, show the post form
+        // if the url param is present, show the post form
     var can_post = getUrlParam("post")
     if (can_post == "true") {
         $("#new-snippet-container").show()
@@ -59,7 +59,7 @@ function init() {
         // initialize all copy buttons
         new ClipboardJS('.copy-btn');
         // render the tags we collected
-        renderAllTags()
+        renderTags()
     })
 }
 
@@ -95,15 +95,6 @@ function newSnippet() {
             console.log("Data: " + data + "\nStatus: " + status);
         });
     }
-}
-
-// when the user clicks 'more' to show all available tags
-function showAllTags() {
-    $(".page-tags").empty()
-    $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("all")'>all</button>`)
-    $.each(all_tags, function(i, v) {
-        $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + v + `")'>` + v + `</button>`)
-    })
 }
 
 // when a user clicks a tag
@@ -150,6 +141,35 @@ function filterOnTag(tag) {
             });
         });
     }
+}
+
+// render all tags in the global all_tags variable
+function renderTags() {
+    $(".page-tags").empty()
+    $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("all")'>all</button>`)
+    all_tags = all_tags.filter(uniqueTags)
+    all_tags.sort()
+    $.each(all_tags, function(i, v) {
+            if (i < 10) {
+                $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + v + `")'>` + v + `</button>`)
+            }
+            if (i == 10) {
+                $(".page-tags").append(`<button class='snippet-tag-link' onclick='renderAllTags()'>more ...</button>`)
+            }
+        })
+        // to filter to unique tags only
+    function uniqueTags(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+}
+
+// when the user clicks 'more' to show all available tags
+function renderAllTags() {
+    $(".page-tags").empty()
+    $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("all")'>all</button>`)
+    $.each(all_tags, function(i, v) {
+        $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + v + `")'>` + v + `</button>`)
+    })
 }
 
 // to extract the url parameter
@@ -202,22 +222,4 @@ function createSnippetHTML(title, id, content, meta, tags) {
         <button class="float-right copy-btn"  data-clipboard-action="copy" data-clipboard-target="#` + id +
         ` .snippet-content">copy</button></div></li>`
     return template
-}
-
-// render all tags in the global all_tags variable
-function renderAllTags() {
-    all_tags = all_tags.filter(uniqueTags)
-    all_tags.sort()
-    $.each(all_tags, function(i, v) {
-        if (i < 10) {
-            $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + v + `")'>` + v + `</button>`)
-        }
-        if (i == 10) {
-            $(".page-tags").append(`<button class='snippet-tag-link' onclick='showAllTags()'>more ...</button>`)
-        }
-    })
-    // to filter to unique tags only
-    function uniqueTags(value, index, self) {
-        return self.indexOf(value) === index;
-    }
 }
