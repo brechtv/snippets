@@ -93,6 +93,7 @@ label {
 	font-size: large;
 	font-family: 'PT Sans', sans-serif;
 	font-weight: bold;
+	color: #E91E63;
 }
 
 .snippet-counter {
@@ -105,16 +106,16 @@ label {
 	background-color: #c5c5c5;
 	color: #fff;
 	padding: 2px 5px 2px 5px;
-	border-radius: 2px;
+	/*border-radius: 2px;*/
 	margin-right: 5px;
 }
 
-.snippet-tag-link {
+.snippet-tag-link, .all-tag-link  {
 	font-size: x-small;
 	background-color: #c5c5c5;
 	color: #fff;
 	padding: 2px 5px 2px 5px;
-	border-radius: 2px;
+	/*border-radius: 2px;*/
 	margin-right: 5px;
 	border-style: none;
 	cursor: pointer
@@ -135,6 +136,10 @@ label {
 	color: #E91E63;
 	border-style: none;
 	cursor: pointer
+}
+
+.copy-btn:focus {
+	color: #fff;
 }
 
 .snippets-container {
