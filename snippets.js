@@ -42,9 +42,6 @@ function init() {
             });
             all_tags = all_tags.concat(tags)
 
-
-            console.log(snippetData.tags)
-
             // create the HTML for the snippet
             var snippetHTML = createSnippetHTML(
                 snippetData.title,
@@ -101,7 +98,8 @@ function newSnippet() {
         // everything else is done Zapier side
     if (snippet.token == "AQW") {
         $.post("https://hooks.zapier.com/hooks/catch/2756301/q80edt/", snippet, function(data, status) {
-            console.log("Data: " + data + "\nStatus: " + status);
+            console.log("Status: " + status);
+            console.log(data)
             $("#new-snippet-container").hide()
             setTimeout(function() {
                 location.reload()

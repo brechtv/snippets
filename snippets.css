@@ -123,6 +123,11 @@ label {
 	font-family: 'PT Sans', sans-serif;
 }
 
+.page-subtitle {
+	font-size: x-small;
+	font-family: 'PT Sans', sans-serif;
+}
+
 .snippet-tags {
 	font-size: x-small;
 	background-color: #c5c5c5;
