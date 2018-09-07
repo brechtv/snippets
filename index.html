@@ -8,23 +8,56 @@
 		<link rel="stylesheet" type="text/css" href="snippets.css">
 	</head>
 	<body>
-		<main role="main" class="container mt-5 mb-5 snippets-container">
-			<div class="row">
-				<div class="col-md-8 offset-md-2 text-center">
-					<h4 class="page-title">Snippets</h4>
-					<p class="snippet-counter text-center"></p>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-8 offset-md-2 text-center">
-					<div class="page-tags">
-						<button class='snippet-tag-link' onclick='filterOnTag("all")'>show all</button>
+		<div class="jumbotron">
+			<div class="container text-center">
+				<h4 class="page-title">Snippets</h4>
+				<p class="snippet-counter text-center"></p>
+				<div class="row">
+					<div class="col-md-8 offset-md-2 text-center">
+						<div class="page-tags">
+							<button class='snippet-tag-link' onclick='filterOnTag("all")'>all</button>
+						</div>
 					</div>
 				</div>
 			</div>
+		</div>
+		<div id="new-snippet-container" class="container snippet-form" style="display:none">
+			<div class="col-md-8 offset-md-2">
+			<div>
+				<h4 class="new-snippet-form-title">New Snippet <button class="btn float-right close-button" onclick='$("#new-snippet-container").hide()'>close modal</button><button class="btn float-right close-button" onclick='window.location.href = "https://docs.google.com/spreadsheets/d/1aF7Tn6uHd3iUC9ST2O23LiPFK3MpK3Xv3tKR2f1E7vI/edit#gid=0"'>open sheet</button></h4>
+				<div class="form-group">
+					<label for="new-snippet-title">Title</label>
+					<input type="text" class="form-control" id="new-snippet-title" placeholder="">
+				</div>
+				<div class="form-group">
+					<label for="new-snippet-content">Content</label>
+					<textarea class="form-control" id="new-snippet-content" rows="6"></textarea>
+				</div>
+				<div class="form-group">
+					<label for="new-snippet-meta">Meta Line</label>
+					<input type="text" class="form-control" id="new-snippet-meta" placeholder="">
+				</div>
+				<div class="form-group">
+					<label for="new-snippet-tags">Tags</label>
+					<input type="text" class="form-control" id="new-snippet-tags" placeholder="">
+				</div>
+				<button id="new-snippet-submit" class="btn btn-link mb-2" onclick="newSnippet()">Publish Snippet</button>
+			</div>
+		</div>
+		</div>
+		<main role="main" class="container mt-5 mb-5 snippets-container">
 			<div class="row">
 				<div class="col-md-8 offset-md-2">
-					<ul class="timeline"></ul>
+					<ul class="timeline">
+						<li id="loading-snippet" class="snippet-li">
+							<span class="snippet-title">Loading snippets...</span>
+							<div class="snippet-content">
+								This shouldn't take long.
+							</div>
+							<div class="snippet-footer">
+							</div>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -34,7 +67,7 @@
 			</div>
 		</footer>
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-		 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
 		<script type="text/javascript" src="https://simonwaldherr.github.io/micromarkdown.js/dist/micromarkdown.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
