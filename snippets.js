@@ -8,10 +8,7 @@ init()
 
 // main function
 function init() {
-    // clear first, in case it's a re-init
-    $(".timeline").empty()
-    $(".snippet-tag-link").remove()
-        // if the url param is present, show the post form
+    // if the url param is present, show the post form
     var can_post = getUrlParam("post")
     if (can_post == "true") {
         $("#new-snippet-container").show()
@@ -19,8 +16,10 @@ function init() {
 
     // call the spreadsheet
     $.getJSON(URL, function(data) {
-
-        // clear the page and add total snippets
+        // clear first, in case it's a re-init
+        $(".timeline").empty()
+        $(".snippet-tag-link").remove()
+            // clear the page and add total snippets
         $("#loading-snippet").remove()
         var results = data.feed.entry;
         results.reverse() // last snippet to the top
@@ -234,9 +233,9 @@ function updateResult(query) {
     let resultList = document.querySelector(".page-tags");
     resultList.innerHTML = "";
 
-    all_tags.map(function(algo){
-        query.split(" ").map(function (word){
-            if(algo.toLowerCase().indexOf(word.toLowerCase()) != -1){
+    all_tags.map(function(algo) {
+        query.split(" ").map(function(word) {
+            if (algo.toLowerCase().indexOf(word.toLowerCase()) != -1) {
                 resultList.innerHTML += `<button class='all-tag-link' onclick='filterOnTag("")'>${algo}</button>`;
             }
         })

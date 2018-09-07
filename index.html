@@ -14,6 +14,7 @@
 				<p class="snippet-counter text-center"></p>
 				<div class="row">
 					<div class="col-md-8 offset-md-2 text-center">
+						<h4 class="tags-title">Tags</h4>
 						<input oninput="updateResult(this.value)" type="search" placeholder="Search tags" class="search-tags-input" />
 						<div class="page-tags">
 							<button class='all-tag-link' onclick='filterOnTag("all")'>all</button>
@@ -24,31 +25,31 @@
 		</div>
 		<div id="new-snippet-container" class="container snippet-form" style="display:none">
 			<div class="col-md-8 offset-md-2">
-			<div>
-				<h4 class="new-snippet-form-title">New Snippet <button class="btn float-right close-button" onclick='$("#new-snippet-container").hide()'>close modal</button><button class="btn float-right close-button" onclick='window.location.href = "https://docs.google.com/spreadsheets/d/1aF7Tn6uHd3iUC9ST2O23LiPFK3MpK3Xv3tKR2f1E7vI/edit#gid=0"'>open sheet</button></h4>
-				<div class="form-group">
-					<label for="new-snippet-title">Title</label>
-					<input type="text" class="form-control" id="new-snippet-title" placeholder="">
+				<div>
+					<h4 class="new-snippet-form-title">New Snippet <button class="btn float-right close-button" onclick='$("#new-snippet-container").hide()'>close modal</button><button class="btn float-right close-button" onclick='window.location.href = "https://docs.google.com/spreadsheets/d/1aF7Tn6uHd3iUC9ST2O23LiPFK3MpK3Xv3tKR2f1E7vI/edit#gid=0"'>open sheet</button></h4>
+					<div class="form-group">
+						<label for="new-snippet-title">Title</label>
+						<input type="text" class="form-control" id="new-snippet-title" placeholder="">
+					</div>
+					<div class="form-group">
+						<label for="new-snippet-content">Content</label>
+						<textarea class="form-control" id="new-snippet-content" rows="6"></textarea>
+					</div>
+					<div class="form-group">
+						<label for="new-snippet-meta">Meta Line</label>
+						<input type="text" class="form-control" id="new-snippet-meta" placeholder="">
+					</div>
+					<div class="form-group">
+						<label for="new-snippet-tags">Tags</label>
+						<input type="text" class="form-control" id="new-snippet-tags" placeholder="">
+					</div>
+					<div class="form-group">
+						<label for="new-snippet-token">Token</label>
+						<input type="text" class="form-control" id="new-snippet-token" placeholder="Your admin credentials">
+					</div>
+					<button id="new-snippet-submit" class="btn btn-link mb-2" onclick="newSnippet()">Publish Snippet</button>
 				</div>
-				<div class="form-group">
-					<label for="new-snippet-content">Content</label>
-					<textarea class="form-control" id="new-snippet-content" rows="6"></textarea>
-				</div>
-				<div class="form-group">
-					<label for="new-snippet-meta">Meta Line</label>
-					<input type="text" class="form-control" id="new-snippet-meta" placeholder="">
-				</div>
-				<div class="form-group">
-					<label for="new-snippet-tags">Tags</label>
-					<input type="text" class="form-control" id="new-snippet-tags" placeholder="">
-				</div>
-				<div class="form-group">
-					<label for="new-snippet-token">Token</label>
-					<input type="text" class="form-control" id="new-snippet-token" placeholder="Your admin credentials">
-				</div>
-				<button id="new-snippet-submit" class="btn btn-link mb-2" onclick="newSnippet()">Publish Snippet</button>
 			</div>
-		</div>
 		</div>
 		<main role="main" class="container mt-5 mb-5 snippets-container">
 			<div class="row">

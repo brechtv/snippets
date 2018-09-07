@@ -45,9 +45,9 @@ label {
 	color: #353535;
 	border-style: none;
 	border-bottom-style: solid;
-	border-bottom-color: #b5b5b5;
+	border-bottom-color: #d5d5d5;
 	border-bottom-width: 1px;
-	width: 100%;
+	width: 200px;
 	text-align: center
 }
 
@@ -94,6 +94,12 @@ label {
 
 .page-title {
 	font-size: xx-large;
+	font-family: 'PT Sans', sans-serif;
+	font-weight: bold;
+}
+
+.tags-title {
+	font-size: large;
 	font-family: 'PT Sans', sans-serif;
 	font-weight: bold;
 }
