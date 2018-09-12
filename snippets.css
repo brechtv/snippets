@@ -5,6 +5,20 @@ html, body {
 	background-color: #fff;
 }
 
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0; 
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255,255,255,0.8); /* Black background with opacity */
+    z-index: 20; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
 a {
 	color: #E91E63
 }
@@ -27,7 +41,7 @@ button:focus {
 }
 
 .jumbotron {
-	background-color: #fff;
+	background-color: #333;
 	border-bottom-style: solid;
 	border-bottom-color: #e5e5e5;
 	border-bottom-width: 1px;
@@ -62,7 +76,11 @@ label {
 	border-radius: 5px;
 	padding-top: 20px;
 }
-
+/*
+.page-tags {
+	display: none
+}
+*/
 .new-snippet-form-title {
 	font-size: large;
 	font-family: 'PT Sans', sans-serif;
@@ -80,6 +98,12 @@ label {
 	cursor: pointer;
 }
 
+.tags-title {
+	padding: 5px;
+	background-color: #444;
+	border-radius: 5px;
+}
+
 #new-snippet-submit {
 	font-size: x-small;
 	background-color: #c5c5c5;
@@ -95,13 +119,22 @@ label {
 .page-title {
 	font-size: xx-large;
 	font-family: 'PT Sans', sans-serif;
+	color: #fff;
 	font-weight: bold;
+}
+
+.page-subtitle {
+	font-size: x-small;
+	font-family: 'PT Sans', sans-serif;
+	color: #fff;
 }
 
 .tags-title {
 	font-size: large;
 	font-family: 'PT Sans', sans-serif;
 	font-weight: bold;
+	color: #fff;
+
 }
 
 .snippet-li {
@@ -123,11 +156,6 @@ label {
 	font-family: 'PT Sans', sans-serif;
 }
 
-.page-subtitle {
-	font-size: x-small;
-	font-family: 'PT Sans', sans-serif;
-}
-
 .snippet-tags {
 	font-size: x-small;
 	background-color: #c5c5c5;
@@ -139,7 +167,7 @@ label {
 
 .snippet-tag-link, .all-tag-link  {
 	font-size: x-small;
-	background-color: #c5c5c5;
+	background-color: #444;
 	color: #fff;
 	padding: 2px 5px 2px 5px;
 	border-radius: 2px;
@@ -158,9 +186,20 @@ label {
 	margin-top: 10px;
 }
 
-.copy-btn {
+.copy-btn{
 	font-size: x-small;
 	color: #E91E63;
+	border-style: none;
+	cursor: pointer
+}
+
+.random-btn {
+	font-size: x-small;
+	background-color: #c5c5c5;
+	color: #fff;
+	padding: 2px 5px 2px 5px;
+	border-radius: 2px;
+	margin-right: 5px;
 	border-style: none;
 	cursor: pointer
 }
@@ -199,7 +238,7 @@ ul.timeline:before {
 	left: -25px;
 	width: 2px;
 	height: 100%;
-	z-index: 400;
+	z-index: 3;
 }
 
 ul.timeline > li:before {
@@ -212,7 +251,7 @@ ul.timeline > li:before {
 	left: -34px;
 	width: 20px;
 	height: 20px;
-	z-index: 400;
+	z-index: 3;
 }
 
 ul, menu, dir {

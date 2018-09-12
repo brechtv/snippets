@@ -8,18 +8,36 @@
 		<link rel="stylesheet" type="text/css" href="snippets.css">
 	</head>
 	<body>
-		<div class="jumbotron">
+		<div id="overlay"></div>
+		<div class="jumbotron" id="navbar">
 			<div class="container text-center">
 				<h4 class="page-title">Snippets</h4>
 				<p class="page-subtitle text-center">Snippets contains interesting book snippets and short texts explaining or clarifying impactful ideas.</p>
-				<!-- <p class="snippet-counter text-center"></p> -->
-				<div class="row">
+				<div class="row" id="tagsbar">
 					<div class="col-md-8 offset-md-2 text-center">
-						<h4 class="tags-title">Tags</h4>
-						<input oninput="updateResult(this.value)" type="search" placeholder="Search tags" class="search-tags-input" />
-						<div class="page-tags">
+						<div class="accordion-heading">
+							<a class="accordion-toggle"
+								data-toggle="collapse"
+								data-parent="#accordion2"
+							href="#collapseOne"><h4 class="tags-title">See Tags<span class="float-right "></span></h4></a>
+						</div>
+						<div id="collapseOne" class="accordion-body collapse">
+							<div class="span6">
+								<div class="well well-small">
+									<div class="accordion-toggle">
+										<div id="tags-bar" class="page-tags">
 							<button class='all-tag-link' onclick='filterOnTag("all")'>all</button>
 						</div>
+									</div>
+								</div>
+							</div>
+							<div class="span2"></div>
+						</div>
+						<!-- <h4 class="tags-title">Tags</h4> -->
+						<!-- <input id="tag-searcher" oninput="updateResult(this.value)" type="search" placeholder="Search tags" class="search-tags-input" /> -->
+						<!-- <div id="tags-bar" class="page-tags">
+							<button class='all-tag-link' onclick='filterOnTag("all")'>all</button>
+						</div> -->
 					</div>
 				</div>
 			</div>

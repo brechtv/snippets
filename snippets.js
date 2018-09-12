@@ -1,14 +1,70 @@
+
 // globals
 var all_tags = []
 var URL = "https://spreadsheets.google.com/feeds/list/" +
     getSheetId() + "/od6/public/values?alt=json"
 
+
+
+var $loading = $('#overlay').hide();
+$(document)
+  .ajaxStart(function () {
+    // $loading.show();
+    $(".container").css({
+       'filter'         : 'blur(4px)',
+       '-webkit-filter' : 'blur(4px)',
+       '-moz-filter'    : 'blur(4px)',
+       '-o-filter'      : 'blur(4px)',
+       '-ms-filter'     : 'blur(4px)'
+    });
+  })
+  .ajaxStop(function () {
+    // $loading.hide();
+    $(".container").css({
+       'filter'         : 'blur(0px)',
+       '-webkit-filter' : 'blur(0px)',
+       '-moz-filter'    : 'blur(0px)',
+       '-o-filter'      : 'blur(0px)',
+       '-ms-filter'     : 'blur(0px)'
+    });
+  });
+
 // initialize the page
-init()
+preface()
+
+function preface() {
+    $(".timeline").empty()
+    var introHTML = createSnippetHTML(
+        "Pick a tag to get started",
+        "pick_a_tag",
+        "Pick a tag to see related snippets or pick <i>all</i> to see all available snippets.",
+        "Or get a <button class='random-btn' onclick='getRandom()'>random</button> snippet.", "getting started")
+    $(".timeline").append(introHTML)
+        // call the spreadsheet
+    $.getJSON(URL, function(data) {
+        $(".snippet-tag-link").remove()
+        $("#loading-snippet").remove()
+        var results = data.feed.entry;
+        results.reverse()
+            // render all tags
+        $.each(results, function(key, result) {
+            var tags_for_snippet = result.gsx$tags.$t
+                // add tags to all tags
+            var tags = tags_for_snippet.split(",").map(function(str) {
+                return str.trim();
+            });
+            all_tags = all_tags.concat(tags)
+        });
+        renderAllTagsWithCounts()
+
+
+    })
+
+
+}
 
 // main function
 function init() {
-    // if the url param is present, show the post form
     var can_post = getUrlParam("post")
     if (can_post == "true") {
         $("#new-snippet-container").show()
@@ -161,11 +217,44 @@ function createSnippetHTML(title, id, content, meta, tags) {
     return template
 }
 
-// everything tag related
+
+// when a user clicks a tag
+function getRandom() {
+    $(".page-tags").empty()
+    $.getJSON(URL, function(data) {
+            // clear the timeline first
+            $(".timeline").empty()
+            var results = data.feed.entry;
+            var rn = Math.floor(Math.random() * (results.length - 0)) + 0;
+            result = results[rn]
+            var snippetData = createSnippet(
+                result.gsx$title.$t,
+                result.gsx$title.$t.toLowerCase()
+                .replace(/[^a-zA-Z0-9 ]/g, '')
+                .replace(/[ ]/g, "_"),
+                micromarkdown.parse(result.gsx$content.$t),
+                micromarkdown.parse(result.gsx$meta.$t),
+                result.gsx$tags.$t)
+
+            // create the HTML for the snippet
+            var snippetHTML = createSnippetHTML(
+                snippetData.title,
+                snippetData.id,
+                snippetData.content,
+                snippetData.meta,
+                snippetData.tags)
+
+                // and add to timeline
+            $(".timeline").append(snippetHTML);
+            renderTags()
+    })
+}
 
 
 // when a user clicks a tag
 function filterOnTag(tag) {
+    // $("#tag-searcher").val(" ")
+    // updateResult(" ")
     if (tag == "all") {
         init()
         if (history.pushState) {
@@ -175,6 +264,7 @@ function filterOnTag(tag) {
             }, '', newurl);
         }
     } else {
+        $(".page-tags").empty()
         if (history.pushState) {
             var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?tag=' + tag;
             window.history.pushState({
@@ -220,10 +310,12 @@ function filterOnTag(tag) {
                     $(".timeline").append(snippetHTML);
                 }
             });
+            renderTags()
         });
     }
 }
 
+//tags 
 // render all tags in the global all_tags variable
 function renderTags() {
     $(".page-tags").empty()
@@ -231,31 +323,54 @@ function renderTags() {
     all_tags = all_tags.filter(uniqueTags)
     all_tags.sort()
     $.each(all_tags, function(i, v) {
-            if (i < 10) {
-                $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + v + `")'>` + v + `</button>`)
-            }
-            if (i == 10) {
-                $(".page-tags").append(`<button class='snippet-tag-link' onclick='renderAllTags()'>more ...</button>`)
-            }
-        })
-        // to filter to unique tags only
-    function uniqueTags(value, index, self) {
-        return self.indexOf(value) === index;
-    }
+        if (i < 10) {
+            $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + v + `")'>` + v + `</button>`)
+        }
+        if (i == 10) {
+            $(".page-tags").append(`<button class='snippet-tag-link' onclick='renderAllTags()'>more ...</button>`)
+        }
+    })
 }
 
 // when the user clicks 'more' to show all available tags
 function renderAllTags() {
     $(".page-tags").empty()
     $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("all")'>all</button>`)
+    all_tags = all_tags.filter(uniqueTags)
+    all_tags.sort()
     $.each(all_tags, function(i, v) {
         $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + v + `")'>` + v + `</button>`)
     })
 }
 
+// when the user clicks 'more' to show all available tags
+function renderAllTagsWithCounts() {
+    // $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("all")'>all</button>`)
+    tags_with_counts = countTags(all_tags)
+    $.each(tags_with_counts, function(i, v) {
+        $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + i + `")'>` + i + ` (` + v + `)</button>`)
+    })
+
+    function countTags(arr) {
+        var counts = {};
+        for (var i = 0; i < arr.length; i++) {
+            var num = arr[i];
+            counts[num] = counts[num] ? counts[num] + 1 : 1;
+        }
+        return counts;
+    }
+}
+
+// to filter to unique tags only
+function uniqueTags(value, index, self) {
+    return self.indexOf(value) === index;
+}
+
+
 // listen to the search box
 // returns suggested tags
 function updateResult(query) {
+    $(".page-tags").empty()
     let resultList = document.querySelector(".page-tags");
     resultList.innerHTML = "";
 
