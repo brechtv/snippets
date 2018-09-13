@@ -5,6 +5,7 @@ html, body {
 	background-color: #fff;
 }
 
+
 #overlay {
     position: fixed; /* Sit on top of the page content */
     display: none; /* Hidden by default */
@@ -104,6 +105,12 @@ label {
 	border-radius: 5px;
 }
 
+
+.tags-title:hover {
+	background-color: #fff;
+	color: #353535;
+}
+
 #new-snippet-submit {
 	font-size: x-small;
 	background-color: #c5c5c5;
@@ -174,6 +181,11 @@ label {
 	margin-right: 5px;
 	border-style: none;
 	cursor: pointer
+}
+
+.snippet-tag-link:hover, .all-tag-link:hover  {
+	background-color: #fff;
+	color: #353535
 }
 
 .snippet-content {

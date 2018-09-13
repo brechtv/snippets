@@ -1,4 +1,3 @@
-
 // globals
 var all_tags = []
 var URL = "https://spreadsheets.google.com/feeds/list/" +
@@ -8,32 +7,44 @@ var URL = "https://spreadsheets.google.com/feeds/list/" +
 
 var $loading = $('#overlay').hide();
 $(document)
-  .ajaxStart(function () {
-    // $loading.show();
-    $(".container").css({
-       'filter'         : 'blur(4px)',
-       '-webkit-filter' : 'blur(4px)',
-       '-moz-filter'    : 'blur(4px)',
-       '-o-filter'      : 'blur(4px)',
-       '-ms-filter'     : 'blur(4px)'
+    .ajaxStart(function() {
+        // $loading.show();
+        $(".timeline").css({
+            'filter': 'blur(4px)',
+            '-webkit-filter': 'blur(4px)',
+            '-moz-filter': 'blur(4px)',
+            '-o-filter': 'blur(4px)',
+            '-ms-filter': 'blur(4px)'
+        });
+        $(".snippet-tag-link").css({
+            'filter': 'blur(2px)',
+            '-webkit-filter': 'blur(2px)',
+            '-moz-filter': 'blur(2px)',
+            '-o-filter': 'blur(2px)',
+            '-ms-filter': 'blur(2px)'
+        });
+    })
+    .ajaxStop(function() {
+        // $loading.hide();
+        $(".timeline, .snippet-tag-link").css({
+            'filter': 'blur(0px)',
+            '-webkit-filter': 'blur(0px)',
+            '-moz-filter': 'blur(0px)',
+            '-o-filter': 'blur(0px)',
+            '-ms-filter': 'blur(0px)'
+        });
     });
-  })
-  .ajaxStop(function () {
-    // $loading.hide();
-    $(".container").css({
-       'filter'         : 'blur(0px)',
-       '-webkit-filter' : 'blur(0px)',
-       '-moz-filter'    : 'blur(0px)',
-       '-o-filter'      : 'blur(0px)',
-       '-ms-filter'     : 'blur(0px)'
-    });
-  });
 
 // initialize the page
 preface()
 
 function preface() {
     $(".timeline").empty()
+    var can_post = getUrlParam("post")
+    if (can_post == "true") {
+        $("#new-snippet-container").show()
+        console.log("Can post")
+    }
     var introHTML = createSnippetHTML(
         "Pick a tag to get started",
         "pick_a_tag",
@@ -65,9 +76,11 @@ function preface() {
 
 // main function
 function init() {
+    all_tags = []
     var can_post = getUrlParam("post")
     if (can_post == "true") {
         $("#new-snippet-container").show()
+        console.log("Can post")
     }
     // call the spreadsheet
     $.getJSON(URL, function(data) {
@@ -121,7 +134,7 @@ function init() {
         // initialize all copy buttons
         new ClipboardJS('.copy-btn');
         // render the tags we collected
-        renderTags()
+        renderAllTagsWithCounts()
     })
 }
 
@@ -220,41 +233,39 @@ function createSnippetHTML(title, id, content, meta, tags) {
 
 // when a user clicks a tag
 function getRandom() {
-    $(".page-tags").empty()
+    // $(".page-tags").empty()
     $.getJSON(URL, function(data) {
-            // clear the timeline first
-            $(".timeline").empty()
-            var results = data.feed.entry;
-            var rn = Math.floor(Math.random() * (results.length - 0)) + 0;
-            result = results[rn]
-            var snippetData = createSnippet(
-                result.gsx$title.$t,
-                result.gsx$title.$t.toLowerCase()
-                .replace(/[^a-zA-Z0-9 ]/g, '')
-                .replace(/[ ]/g, "_"),
-                micromarkdown.parse(result.gsx$content.$t),
-                micromarkdown.parse(result.gsx$meta.$t),
-                result.gsx$tags.$t)
+        // clear the timeline first
+        $(".timeline").empty()
+        var results = data.feed.entry;
+        var rn = Math.floor(Math.random() * (results.length - 0)) + 0;
+        result = results[rn]
+        var snippetData = createSnippet(
+            result.gsx$title.$t,
+            result.gsx$title.$t.toLowerCase()
+            .replace(/[^a-zA-Z0-9 ]/g, '')
+            .replace(/[ ]/g, "_"),
+            micromarkdown.parse(result.gsx$content.$t),
+            micromarkdown.parse(result.gsx$meta.$t),
+            result.gsx$tags.$t)
 
-            // create the HTML for the snippet
-            var snippetHTML = createSnippetHTML(
-                snippetData.title,
-                snippetData.id,
-                snippetData.content,
-                snippetData.meta,
-                snippetData.tags)
+        // create the HTML for the snippet
+        var snippetHTML = createSnippetHTML(
+            snippetData.title,
+            snippetData.id,
+            snippetData.content,
+            snippetData.meta,
+            snippetData.tags)
 
-                // and add to timeline
-            $(".timeline").append(snippetHTML);
-            renderTags()
+        // and add to timeline
+        $(".timeline").append(snippetHTML);
+        renderAllTagsWithCounts()
     })
 }
 
 
 // when a user clicks a tag
 function filterOnTag(tag) {
-    // $("#tag-searcher").val(" ")
-    // updateResult(" ")
     if (tag == "all") {
         init()
         if (history.pushState) {
@@ -264,7 +275,6 @@ function filterOnTag(tag) {
             }, '', newurl);
         }
     } else {
-        $(".page-tags").empty()
         if (history.pushState) {
             var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?tag=' + tag;
             window.history.pushState({
@@ -310,46 +320,21 @@ function filterOnTag(tag) {
                     $(".timeline").append(snippetHTML);
                 }
             });
-            renderTags()
+            renderAllTagsWithCounts()
         });
     }
 }
 
 //tags 
-// render all tags in the global all_tags variable
-function renderTags() {
-    $(".page-tags").empty()
-    $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("all")'>all</button>`)
-    all_tags = all_tags.filter(uniqueTags)
-    all_tags.sort()
-    $.each(all_tags, function(i, v) {
-        if (i < 10) {
-            $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + v + `")'>` + v + `</button>`)
-        }
-        if (i == 10) {
-            $(".page-tags").append(`<button class='snippet-tag-link' onclick='renderAllTags()'>more ...</button>`)
-        }
-    })
-}
-
-// when the user clicks 'more' to show all available tags
-function renderAllTags() {
-    $(".page-tags").empty()
-    $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("all")'>all</button>`)
-    all_tags = all_tags.filter(uniqueTags)
-    all_tags.sort()
-    $.each(all_tags, function(i, v) {
-        $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + v + `")'>` + v + `</button>`)
-    })
-}
-
 // when the user clicks 'more' to show all available tags
 function renderAllTagsWithCounts() {
-    // $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("all")'>all</button>`)
     tags_with_counts = countTags(all_tags)
+    tags_html = `<button class='snippet-tag-link' onclick='filterOnTag("all")'>all</button>`
     $.each(tags_with_counts, function(i, v) {
-        $(".page-tags").append(`<button class='snippet-tag-link' onclick='filterOnTag("` + i + `")'>` + i + ` (` + v + `)</button>`)
+        tags_html += `<button class='snippet-tag-link' onclick='filterOnTag("` + v.tag + `")'>` + v.tag + ` (` + v.value + `)</button>`
     })
+    $(".page-tags").html(tags_html)
+
 
     function countTags(arr) {
         var counts = {};
@@ -357,28 +342,20 @@ function renderAllTagsWithCounts() {
             var num = arr[i];
             counts[num] = counts[num] ? counts[num] + 1 : 1;
         }
-        return counts;
-    }
-}
-
-// to filter to unique tags only
-function uniqueTags(value, index, self) {
-    return self.indexOf(value) === index;
-}
-
-
-// listen to the search box
-// returns suggested tags
-function updateResult(query) {
-    $(".page-tags").empty()
-    let resultList = document.querySelector(".page-tags");
-    resultList.innerHTML = "";
-
-    all_tags.map(function(algo) {
-        query.split(" ").map(function(word) {
-            if (algo.toLowerCase().indexOf(word.toLowerCase()) != -1) {
-                resultList.innerHTML += `<button class='all-tag-link' onclick='filterOnTag("${algo}")'>${algo}</button>`;
+        var keysSorted = [];
+        for (var i in counts) {
+            if (counts.hasOwnProperty(i)) {
+                keysSorted.push(
+                    ({
+                        'tag': i,
+                        'value': counts[i]
+                    })
+                );
             }
-        })
-    })
+        }
+        keysSorted.sort(function(a, b) {
+            return b.value - a.value;
+        });
+        return keysSorted;
+    }
 }
